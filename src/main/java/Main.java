@@ -139,7 +139,7 @@ public class Main {
     }
 
     private static boolean connectRedis() {
-        jedisPool = new JedisPool("127.0.0.1", 6379);
+        jedisPool = new JedisPool(properties.getProperty("redis.host"), Integer.parseInt(properties.getProperty("redis.port")));
         try {
             jedis = jedisPool.getResource();
             return true;
