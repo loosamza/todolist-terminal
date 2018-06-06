@@ -15,6 +15,7 @@ Default Redis running on port 6379
 
 2) Configure
 if redis-server running another port or another server just change "template.properties"  
+  
   redis.host = xxx.xxx.xxx (default 127.0.0.1)
   redis.port = xxxx         (default 6379)
 
