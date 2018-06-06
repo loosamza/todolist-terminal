@@ -4,6 +4,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
@@ -66,7 +67,7 @@ public class Main {
             System.out.println(properties.getProperty("app.endline"));
             int i = 1;
             for (Map.Entry<String, String> entry : taskList.entrySet()) {
-                System.out.format("%-20s \t\t\t\t\t\t\t\t\t\t\t%-10s\n", (i + ") " + entry.getValue()), ("#tid = " + entry.getKey()));
+                System.out.format("%-30s \t\t%-30s\n", (i + ") " + entry.getValue()), ("#tid = " + entry.getKey()));
                 i++;
             }
             System.out.println(properties.getProperty("app.endline"));
@@ -77,6 +78,7 @@ public class Main {
     }
 
     private static void showIntro() {
+        System.out.println(properties.getProperty("app.endline"));
         System.out.println(properties.getProperty("app.banner"));
         System.out.println(properties.getProperty("app.endline"));
         System.out.println(properties.getProperty("app.helper"));
@@ -105,11 +107,19 @@ public class Main {
                 showPrompt();
             }
         } else if (!("".equals(task))) {
-            saveTodo(taskList.size() + 1, task);
+            saveTodo(runningId(), task);
             showPrompt();
         } else {
             showAllTodoList(true);
         }
+    }
+
+    private static Integer runningId() {
+        Map.Entry<String, String> maxByKey = taskList.entrySet()
+                .stream()
+                .reduce((curr, nxt) -> Integer.parseInt(curr.getKey()) > Integer.parseInt(nxt.getKey()) ? curr : nxt)
+                .get();
+        return Integer.parseInt(maxByKey.getKey()) + 1;
     }
 
     private static void removeTodo(String key) {
